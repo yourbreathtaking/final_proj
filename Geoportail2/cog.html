@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualisation du COG : Cloud Optimized GeoTIFF</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f3f4f6;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 2rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+
+    .map-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    #map {
+      height: 350px;
+      width: 100%;
+      max-width: 800px;
+      border: 3px solid #ff7e5f;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .info-section {
+      background: white;
+      margin-top: 30px;
+      padding: 25px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-section h2 {
+      color: #ff7e5f;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #feb47b;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .info-section p {
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .info-section ul {
+      padding-left: 20px;
+      margin: 10px 0;
+      list-style-type: square;
+      font-size: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #fff;
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 30px;
+      box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    footer a {
+      color: #ff7e5f;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Visualisation du COG : Cloud Optimized GeoTIFF
+  </header>
+
+  <main>
+    <div class="map-container">
+      <div id="map">
+        <div id="mini-map" style="width: 150px; height: 150px; position: absolute; bottom: 10px; left: 10px; border: 2px solid #ccc; z-index: 1000;"></div>
+      </div>
+    </div>
+
+    <section class="info-section">
+      <h2>À propos du Cloud Optimized GeoTIFF</h2>
+      <p>
+        Le <strong>Cloud Optimized GeoTIFF</strong> (COG) est une évolution du format GeoTIFF qui le rend particulièrement efficace pour une utilisation dans des environnements cloud. Il est conçu pour permettre un accès rapide et direct à des portions spécifiques de données géospatiales sans télécharger tout le fichier.
+      </p>
+      <p>
+        Ce format est idéal pour des applications telles que la cartographie web, l'analyse géospatiale en ligne, et les workflows de traitement cloud, notamment pour les grandes données spatiales.
+      </p>
+      <p>
+        <strong>Avantages principaux :</strong>
+      </p>
+      <ul>
+        <li>Accès rapide et efficace aux données.</li>
+        <li>Réduction des coûts de stockage et de bande passante.</li>
+        <li>Compatibilité avec les technologies modernes SIG.</li>
+        <li>Prise en charge d'analyses à distance dans des infrastructures cloud.</li>
+      </ul>
+      <p>
+        Ce fichier est hébergé à l'URL suivante :
+        <a id="cog-url" href="https://cog-2024.s3.eu-north-1.amazonaws.com/cog/cog2_expl.tif" target="_blank">Lien vers le fichier COG</a>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2024 - Développé avec passion | Consultez notre site pour plus d'outils : <a href="https://leafletjs.com/" target="_blank">Leaflet</a>.
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/proj4"></script>
+  <script src="https://unpkg.com/georaster"></script>
+  <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+  <script>
+    // Initialisation de la carte
+    var map = L.map('map').setView([0, 0], 5);
+
+    // Ajout de la couche OpenStreetMap
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // URL du fichier COG
+    const url_to_geotiff_file = "https://cog-2024.s3.eu-north-1.amazonaws.com/cog/cog2_expl.tif";
+    const cogUrlElement = document.getElementById("cog-url");
+
+    // Mise à jour du lien du fichier COG
+    cogUrlElement.href = url_to_geotiff_file;
+    cogUrlElement.textContent = url_to_geotiff_file;
+
+    // Chargement du fichier GeoTIFF et ajout sur la carte
+    parseGeoraster(url_to_geotiff_file).then(georaster => {
+      var layer = new GeoRasterLayer({
+        attribution: "Données COG",
+        georaster,
+        resolution: 128
+      });
+      layer.addTo(map);
+      map.fitBounds(layer.getBounds());
+    });
+
+
+    // Initialisation de la mini-map
+var miniMap = L.map('mini-map', {
+    center: map.getCenter(), // Synchronisation initiale du centre
+    zoom: map.getZoom() - 5, // Zoom plus faible pour une vue d'ensemble
+    zoomControl: false,     // Pas de contrôle de zoom sur la mini-map
+    attributionControl: false // Pas d'attribution sur la mini-map
+});
+
+// Ajout de la couche de base à la mini-map
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(miniMap);
+
+
+
+
+// Ajout d'un rectangle rouge pour représenter la vue principale
+var bounds = map.getBounds(); // Limites actuelles de la carte principale
+    var rectangle = L.rectangle(bounds, {
+        color: 'red',
+        weight: 20,
+        fillOpacity: 0
+    }).addTo(miniMap);
+
+    // Mettre à jour le rectangle lors du mouvement de la carte principale
+    map.on('move', function () {
+        var bounds = map.getBounds(); // Obtenir les nouvelles limites
+        rectangle.setBounds(bounds); // Mettre à jour les limites du rectangle
+        miniMap.setView(map.getCenter(), map.getZoom() - 13, { animate: false });
+    });
+  </script>
+</body>
+</html>

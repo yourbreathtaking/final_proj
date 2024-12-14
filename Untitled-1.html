@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interroger des données dynamiquement</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            line-height: 1.6;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+
+        .query-container {
+            background-color: #ffffff;
+            padding: 20px;
+            margin: 0 auto 20px;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .query-container input,
+        .query-container button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .query-container input {
+            border: 1px solid #ddd;
+        }
+
+        .query-container button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border: 1px solid #007BFF;
+            transition: background-color 0.3s ease;
+        }
+
+        .query-container button:hover {
+            background-color: #0056b3;
+        }
+
+        #map {
+            height: 500px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tutorial {
+            background-color: #e9f7ef;
+            padding: 20px;
+            border-left: 5px solid #28a745;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+
+        .tutorial h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #155724;
+        }
+
+        .tutorial ul {
+            list-style-type: none;
+        }
+
+        .tutorial li {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .tutorial code {
+            background-color: #f8f9fa;
+            padding: 3px 6px;
+            font-size: 1.1rem;
+            border-radius: 4px;
+        }
+
+        .tutorial b {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interroger Les données GeoJSON :Communes d'Alhouz </h1>
+    <div class="query-container">
+        <input id="query" type="text" placeholder="Exemple : Population > 5000" />
+        <button id="executeQuery">Exécuter la requête</button>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="tutorial">
+        <h2>Comment utiliser la plateforme :</h2>
+        <ul>
+            <li><b>Entrer une requête :</b> Tapez une requête valide dans le champ de texte. Par exemple : <code>Population > 5000</code>.</li>
+            <li><b>Exécuter :</b> Cliquez sur le bouton "Exécuter la requête" pour afficher les résultats sur la carte.</li>
+            <li><b>Exploration :</b> Cliquez sur les points sur la carte pour voir les détails des communes.</li>
+            <li><b>Réinitialisation :</b> Pour revenir à l'état initial, laissez le champ de texte vide et cliquez sur "Exécuter la requête".</li>
+        </ul>
+        <p><b>Exemples de requêtes :</b></p>
+        <ul>
+            <li><code>Population > 5000</code> - Affiche les communes ayant une population supérieure à 5000.</li>
+            <li><code>Type_Commu === "R"</code> - Affiche uniquement les communes rurales.</li>
+            <li><code>Nb_Menages < 2000</code> - Affiche les communes avec moins de 2000 ménages.</li>
+        </ul>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf"></script>
+    <script src="assets/GEOJSON/communes_de_houz.js"></script>
+
+    <script>
+        // Initialisation de la carte
+        const map = L.map('map').setView([31.5541, -7.9372], 10);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        // Fonction pour interroger les données et les afficher
+        function queryFeatures(query) {
+            const filteredFeatures = comm.features.filter(feature => {
+                try {
+                    return eval(query.replace(/OBJECTID|Type_Commu|Code_Commu|Nom_Commun|Nom_Comm_1|Nb_Menages|Population|Etrangers|Marocains|Code_Provi|CODE_REGIO|Code_Com_O|Nom_Com_Ol|Shape__Are|Shape__Len/g, match => `feature.properties.${match}`));
+                } catch (error) {
+                    console.error("Erreur dans la requête:", error);
+                    alert("Requête invalide. Veuillez vérifier la syntaxe.");
+                    return false;
+                }
+            });
+
+            // Ajouter les résultats sur la carte
+            L.geoJSON(filteredFeatures, {
+                style: { color: '#FF5733' },
+                pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 10, fillColor: '#FF5733', color: '#C13C00', weight: 2 }),
+                onEachFeature: function(feature, layer) {
+                    layer.bindPopup(
+                        `<b>Nom:</b> ${feature.properties.Nom_Commun}<br>` +
+                        `<b>Population:</b> ${feature.properties.Population}<br>` +
+                        `<b>Nombre de ménages:</b> ${feature.properties.Nb_Menages}<br>` +
+                        `<b>Type:</b> ${feature.properties.Type_Commu}<br>` +
+                        `<b>Code Région:</b> ${feature.properties.CODE_REGIO}`
+                    );
+                }
+            }).addTo(map);
+        }
+
+        // Gérer le bouton pour exécuter la requête
+        document.getElementById('executeQuery').addEventListener('click', () => {
+            const query = document.getElementById('query').value;
+            if (!query.trim()) {
+                alert("Veuillez entrer une requête.");
+                return;
+            }
+
+            // Réinitialiser la carte avant de charger les nouveaux résultats
+            map.eachLayer(layer => {
+                if (!layer._url) { // Ne pas supprimer les tuiles
+                    map.removeLayer(layer);
+                }
+            });
+
+            queryFeatures(query);
+        });
+
+        // Afficher les données initiales
+        L.geoJSON(comm, {
+            pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 8, fillColor: '#3498db', color: '#2980b9', weight: 1 }),
+            onEachFeature: function(feature, layer) {
+                layer.bindPopup(
+                    `<b>Nom:</b> ${feature.properties.Nom_Commun}<br>` +
+                    `<b>Population:</b> ${feature.properties.Population}<br>` +
+                    `<b>Nombre de ménages:</b> ${feature.properties.Nb_Menages}<br>` +
+                    `<b>Type:</b> ${feature.properties.Type_Commu}<br>` +
+                    `<b>Code Région:</b> ${feature.properties.CODE_REGIO}`
+                );
+            }
+        }).addTo(map);
+    </script>
+</body>
+</html>

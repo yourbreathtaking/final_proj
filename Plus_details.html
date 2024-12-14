@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séisme du Maroc 2023</title>
+    <style>
+        /* Reset de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #2A3C6B, #1F6A8C);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Header avec animation */
+        header {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 50px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            transition: background 0.3s;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            animation: fadeIn 2s 0.5s ease-in;
+        }
+
+        /* Effet d'animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Section d'introduction */
+        .intro {
+            background: #00675B;
+            border-radius: 20px;
+            padding: 50px;
+            margin: 40px 10%;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transform: translateY(20px);
+            animation: slideUp 1s ease-in-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .intro h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .intro p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 20px;
+        }
+
+        /* Section des faits marquants */
+        .section {
+            padding: 60px 20px;
+            background: #1A2A41;
+            text-align: center;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: #FFD700;
+        }
+
+        .facts {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .fact {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .fact:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .fact:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+
+        .fact:nth-child(3) {
+            animation-delay: 0.9s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .fact img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .fact h3 {
+            margin-top: 15px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .fact p {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* Footer avec effet de dégradé */
+        footer {
+            background: linear-gradient(45deg, #1F6A8C, #2A3C6B);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        footer p {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        /* Responsivité */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            .intro h2 {
+                font-size: 2rem;
+            }
+
+            .facts {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .fact {
+                width: 80%;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Séisme du Maroc 2023</h1>
+    <p>Un drame naturel qui a secoué le pays</p>
+</header>
+
+<section class="intro">
+    <h2>Un séisme dévastateur</h2>
+    <p>Le 8 septembre 2023, un tremblement de terre de magnitude 7.0 a frappé la région d'Al Haouz, au sud du Maroc, causant des pertes humaines importantes et des destructions massives. Ce séisme a secoué les villes et villages, avec un impact humain et matériel dramatique.</p>
+</section>
+
+<section class="section">
+    <h2>Faits Marquants</h2>
+    <div class="facts">
+        <div class="fact">
+            <img src="assets/IMGS/1.jpeg" alt="Magnitude du séisme">
+            <h3>Magnitude</h3>
+            <p>Une magnitude de 7,0 sur l'échelle de Richter, provoquant des secousses ressenties à travers tout le pays.</p>
+        </div>
+        <div class="fact">
+            <img src="assets/IMGS/2.jpg" alt="Dégâts sur les infrastructures">
+            <h3>Dégâts sur les infrastructures</h3>
+            <p>Des bâtiments effondrés et des routes coupées ont entravé les efforts de secours dans les zones touchées.</p>
+        </div>
+        <div class="fact">
+            <img src="assets/IMGS/3.jpg" alt="Réponse humanitaire">
+            <h3>Aide humanitaire</h3>
+            <p>Les autorités marocaines et les ONG ont rapidement répondu pour fournir de l'aide aux victimes et reconstruire les régions sinistrées.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 Séisme du Maroc 2023 - Tous droits réservés</p>
+</footer>
+
+</body>
+</html>

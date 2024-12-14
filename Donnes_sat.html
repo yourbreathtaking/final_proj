@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   
+        <link rel="icon" href="assets/IMGS/favicon.ico" type="image/x-icon">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SEISMAROC</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+        <!--------CSS LEAFLET-------->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+        <!--------JS LEAFLET-------->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-compare/dist/leaflet-compare.css" />
+        <script src="https://unpkg.com/leaflet-compare/dist/leaflet-compare.js"></script>
+        <!--------Style CSS -------->
+        <link rel="stylesheet" href="assets/CSS/style.css">
+        <!-- Lien pour la police Sofia depuis Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Sofia&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-side-by-side/leaflet-side-by-side.css">
+        <script src="https://unpkg.com/leaflet-side-by-side/leaflet-side-by-side.js"></script>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>
+        <!-- Include the ECharts file you just downloaded -->
+        <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+        <meta charset=utf-8 />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui' />
+        <title>Leaflet Side-by-side</title>
+        <script src='http://cdn.leafletjs.com/leaflet/v1.3.1/leaflet.js'></script>
+    
+        <link href='http://cdn.leafletjs.com/leaflet/v1.3.1/leaflet.css' rel='stylesheet' />
+        <!--------CSS LEAFLET-------->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+         crossorigin=""/>
+         <!--------JS LEAFLET-------->
+         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+         crossorigin=""></script>
+         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" ></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-compare/dist/leaflet-compare.css" />
+        <script src="https://unpkg.com/leaflet-compare/dist/leaflet-compare.js"></script>
+        <script src="https://unpkg.com/georaster"></script>
+        <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+        <script src="assets/JS/leaflet-side-by-side.js"> </script>
+        <script>src="assets/JS/main.js"</script>
+    
+    
+ 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Données satellitaires - Douar EL HNAINE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .satellite-data {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .satellite-data h2 {
+            color: #0066cc;
+            text-align: center;
+        }
+
+        .satellite-data p {
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        #map2 {
+            height: 500px;
+            margin-top: 20px;
+            margin-left: 140px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #mini-map {
+            width: 150px;
+            height: 150px;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            border: 2px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        footer {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="satellite-data">
+    <h2>Données satellitaires du Douar EL HNAINE  </h2>
+    <p>Le séisme qui a frappé la province d'Al Haouz a été d'une gravité exceptionnelle, causant d'importants dégâts matériels et humains dans plusieurs localités, dont Ijoukak. La secousse, qui a eu son épicentre non loin de la région, a secoué toute la zone, laissant derrière elle des décombres et une situation de grande précarité. Les infrastructures de transport, les habitations et les commerces ont été sévèrement endommagés, perturbant le quotidien des habitants.</p>
+    <p>À quelques kilomètres d'Ijoukak, dans la localité d'El Hanneine, la situation est également préoccupante. Cette zone, qui présente un relief difficile, a subi des destructions considérables. Les maisons, souvent construites de manière traditionnelle et vulnérables aux secousses, ont été largement endommagées, mettant en péril la sécurité des habitants. Cependant, comme dans les autres zones touchées, une grande solidarité a émergé, soutenue par les efforts des autorités et des services d'urgence, permettant à la population d'El Hanneine de bénéficier d'une aide précieuse pour faire face aux conséquences du séisme. Le processus de reconstruction a débuté, bien que les défis restent considérables, notamment en raison de l'isolement géographique de cette zone montagneuse.</p>
+
+    <div id="map2">
+        <div id="mini-map"></div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 Seismaroc.Tous droits réservés.</p>
+</footer>
+
+<script>
+    var map2 = L.map('map2').setView([31.2734, -7.5807], 13);
+
+    const osmLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '&copy; <a href="https://www.esri.com/en-us/home">Esri</a>',
+        maxZoom: 19
+    }).addTo(map2);
+
+    const stamenLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '&copy; <a href="https://www.esri.com/en-us/home">Esri</a>',
+        maxZoom: 19
+    }).addTo(map2);
+
+    var urlToGeoTiffLeft = "expl.tif";
+
+    function addGeoTiffLayer(url) {
+        return fetch(url)
+            .then(response => response.arrayBuffer())
+            .then(arrayBuffer => {
+                return parseGeoraster(arrayBuffer).then(georaster => {
+                    var layer = new GeoRasterLayer({
+                        georaster: georaster,
+                        opacity: 1,
+                        resolution: 256
+                    });
+                    return layer;
+                });
+            });
+    }
+
+    var emptyLayer = L.layerGroup().addTo(map2);
+
+    addGeoTiffLayer(urlToGeoTiffLeft).then(leftGeoTiffLayer => {
+        leftGeoTiffLayer.addTo(map2);
+        map2.fitBounds(leftGeoTiffLayer.getBounds());
+        var compare = L.control.compare([leftGeoTiffLayer, osmLayer], [emptyLayer, stamenLayer]).addTo(map2);
+    });
+
+    var miniMap = L.map('mini-map', {
+        center: map2.getCenter(),
+        zoom: map2.getZoom() - 10,
+        zoomControl: false,
+        attributionControl: false
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(miniMap);
+
+    var bounds = map2.getBounds();
+    var rectangle = L.rectangle(bounds, {
+        color: 'red',
+        weight: 2,
+        fillOpacity: 0
+    }).addTo(miniMap);
+
+    map2.on('move', function () {
+        var bounds = map2.getBounds();
+        rectangle.setBounds(bounds);
+        miniMap.setView(map2.getCenter(), map2.getZoom() - 1, { animate: false });
+    });
+</script>
+
+</body>
+</html>

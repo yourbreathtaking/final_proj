@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .container h2 {
+            font-size: 1.8rem;
+            color: #0056b3;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+    
+        .container p {
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.6;
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+    
+        .container ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    
+        .container ul li {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #555;
+        }
+    
+        .container ul li ul {
+            list-style-type: circle;
+            margin-left: 20px;
+        }
+    
+        .container ul li ul li {
+            font-size: 0.95rem;
+            color: #666;
+        }
+    
+        .container {
+            margin-top: 30px;
+            background: linear-gradient(to bottom, #e3f2fd, #ffffff);
+            border: 1px solid #007bff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requêtes SQL sur les communes EL HOUZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #343a40;
+            margin-top: 30px;
+        }
+
+        /* Container for query and results */
+        .container {
+            width: 90%;
+            max-width: 900px;
+            padding: 20px;
+            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for textarea and button */
+        textarea, button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 150px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Result table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f1f1;
+            font-weight: 500;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Error message */
+        .error {
+            color: red;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .info-message {
+            color: #28a745;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Requêtes SQL sur Les données :Communes de ELHOUZ</h1>
+
+    <div class="container">
+        <textarea id="query" placeholder="Écrivez votre requête SQL ici..."></textarea>
+        <button id="executeQuery">Exécuter la requête</button>
+
+        <h2>Résultats</h2>
+        <div id="results"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <script src="assets/GEOJSON/communes_de_houz.js"></script>
+    <script>
+        let db;
+
+        // Initialisation de sql.js
+        initSqlJs({
+            locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+        }).then(SQL => {
+            db = new SQL.Database();
+
+            const firstFeature = comm.features[0];
+            const columns = Object.keys(firstFeature.properties);
+            const columnTypes = {};
+
+            comm.features.forEach(feature => {
+                for (const [key, value] of Object.entries(feature.properties)) {
+                    if (value === null || value === undefined) continue;
+                    if (!isNaN(value) && typeof value !== "string") {
+                        columnTypes[key] = "NUMERIC";
+                    } else {
+                        columnTypes[key] = "TEXT";
+                    }
+                }
+            });
+
+            const createTableQuery = `
+                CREATE TABLE geojson (
+                    ${columns.map(col => `${col} ${columnTypes[col] || "TEXT"}`).join(", ")}
+                );
+            `;
+            db.run(createTableQuery);
+
+            comm.features.forEach(feature => {
+                const props = feature.properties;
+                const values = columns.map(col => {
+                    const value = props[col];
+                    if (value === null || value === undefined) return "NULL";
+                    if (!isNaN(value) && typeof value !== "string") return value;
+                    return `'${value.replace(/'/g, "''")}'`;
+                }).join(", ");
+                db.run(`INSERT INTO geojson (${columns.join(", ")}) VALUES (${values});`);
+            });
+
+            console.log("Base de données initialisée avec succès !");
+        }).catch(err => {
+            console.error("Erreur lors de l'initialisation de sql.js :", err);
+        });
+
+        document.getElementById('executeQuery').addEventListener('click', () => {
+            const query = document.getElementById('query').value;
+
+            if (!query.trim()) {
+                alert("Veuillez entrer une requête SQL.");
+                return;
+            }
+
+            try {
+                const result = db.exec(query);
+                if (result.length > 0) {
+                    displayResults(result[0]);
+                } else {
+                    document.getElementById('results').innerHTML = "<p>Aucun résultat trouvé.</p>";
+                }
+            } catch (error) {
+                console.error("Erreur SQL :", error);
+                document.getElementById('results').innerHTML = `<p class="error">Erreur SQL : ${error.message}</p>`;
+            }
+        });
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            if (data.values.length === 0) {
+                resultsDiv.textContent = "Aucun résultat trouvé.";
+                return;
+            }
+
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            const headerRow = document.createElement('tr');
+            data.columns.forEach(col => {
+                const th = document.createElement('th');
+                th.textContent = col;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+
+            data.values.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            resultsDiv.appendChild(table);
+
+            resultsDiv.innerHTML += `<p class="info-message">Requête exécutée avec succès !</p>`;
+        }
+    </script>
+    <div class="container">
+        <h2>Tutoriel  : Utilisation des Requêtes SQL</h2>
+        <p>Cette interface vous permet d'explorer les données GeoJSON en utilisant SQL. Voici les étapes clés :</p>
+        <ul>
+            <li><strong>Initialisation :</strong> Les données GeoJSON sont converties en une table SQL appelée <code>geojson</code>.</li>
+            <li><strong>Écrire une requête :</strong> Saisissez une requête SQL dans la zone de texte. Par exemple :
+                <ul>
+                    <li><code>SELECT * FROM geojson;</code> — Affiche toutes les données.</li>
+                    <li><code>SELECT Nom_Commun FROM geojson WHERE population > 5000;</code> — Filtre les communes.</li>
+                </ul>
+            </li>
+            <li><strong>Exécuter :</strong> Cliquez sur <em>Exécuter la requête</em> pour voir les résultats sous forme de tableau.</li>
+            <li><strong>Gestion des erreurs :</strong> Les messages d'erreur s'affichent si la syntaxe SQL est incorrecte.</li>
+        </ul>
+        <p>Essayez différentes requêtes pour analyser vos données !</p>
+    </div>
+</body>
+</html>

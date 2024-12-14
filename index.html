@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="assets/IMGS/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEISMAROC</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+    <!--------CSS LEAFLET-------->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!--------JS LEAFLET-------->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-compare/dist/leaflet-compare.css" />
+    <script src="https://unpkg.com/leaflet-compare/dist/leaflet-compare.js"></script>
+    <!--------Style CSS -------->
+    <link rel="stylesheet" href="assets/CSS/style.css">
+    <!-- Lien pour la police Sofia depuis Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Sofia&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-side-by-side/leaflet-side-by-side.css">
+    <script src="https://unpkg.com/leaflet-side-by-side/leaflet-side-by-side.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>
+    <!-- Include the ECharts file you just downloaded -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <meta charset=utf-8 />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui' />
+    <title>Leaflet Side-by-side</title>
+    <script src='http://cdn.leafletjs.com/leaflet/v1.3.1/leaflet.js'></script>
+
+    <link href='http://cdn.leafletjs.com/leaflet/v1.3.1/leaflet.css' rel='stylesheet' />
+    <!--------CSS LEAFLET-------->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+     <!--------JS LEAFLET-------->
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" ></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-compare/dist/leaflet-compare.css" />
+    <script src="https://unpkg.com/leaflet-compare/dist/leaflet-compare.js"></script>
+    <script src="https://unpkg.com/georaster"></script>
+    <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+    <script src="assets/JS/leaflet-side-by-side.js"> </script>
+    <script>src="assets/JS/main.js"</script>
+    <script src="data1.js"></script>
+    <script src="data2.js"></script>
+
+
+</head>
+
+<body>
+    <style>
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            /* Largeur du conteneur */
+            /* Hauteur de la fenêtre visible */
+            /* Couleur d'arrière-plan optionnelle */
+        }
+        
+        #map {
+            width: 1100px;
+            height: 650px;
+            border: 2px solid #52c09b;
+            /* Bordure pour le cadre */
+            border-radius: 1px;
+            /* Coins arrondis pour le cadre */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            /* Effet d'ombre pour le cadre */
+        }
+        
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+        
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+        
+        .legend {
+            text-align: left;
+            line-height: 18px;
+            color: #555;
+        }
+        
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+        
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .top-bar {
+            background-color: #004a6f;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        
+        .top-bar a:hover {
+            text-decoration: underline;
+        }
+        /* Logo */
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            width: 35px;
+            height: 35px;
+            margin-right: 10px;
+        }
+        /* Menu Principal */
+        
+        .menu {
+            background-color: #ffffff;
+            border-top: 4px solid #004a6f;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px 20px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin: 0 15px;
+            border-radius: 25px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .menu a:hover {
+            color: white;
+            background-color: #004a6f;
+        }
+        /* Mobile responsiveness */
+        
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .menu {
+                flex-direction: column;
+                width: 100%;
+            }
+            .menu a {
+                width: 100%;
+                text-align: center;
+                padding: 15px;
+                margin: 5px 0;
+            }
+        }
+        
+        .team-section {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .team-section h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #444;
+        }
+        
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .team-member {
+            display: none;
+            border: none;
+            border-radius: 20px;
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            box-shadow: 8px 8px 15px #d1d1d1, -8px -8px 15px #ffffff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .team-member.show {
+            display: block;
+            animation: fadeInCircle 1s ease-in-out;
+        }
+        
+        .team-member img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .team-member p {
+            margin: 5px 0;
+            color: #555;
+        }
+        
+        @keyframes fadeInCircle {
+            0% {
+                transform: scale(0) rotate(360deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <!-- Écran de chargement -->
+    <!-- Écran de chargement -->
+    <div id="loading-screen">
+        <img id="loading-favicon" src="assets/IMGS/favicon.ico" alt="Favicon">
+        <div id="loading-title">Seismaroc</div>
+        <div class="spinner"></div>
+    </div>
+    <script>
+        window.addEventListener("load", function() {
+            document.getElementById("loading-screen").classList.add("hidden");
+        });
+    </script>
+
+
+
+    <div class="top-bar">
+        <div class="logo">
+            <img id="loading-favicon" src="assets/IMGS/favicon.ico" alt="Favicon"> Seismaroc
+        </div>
+
+    </div>
+
+    <!-- Menu principal -->
+    <nav class="menu">
+        <a href="#accueil" onclick="resetPage()">Accueil</a>
+        <a href="Donnes_sat.html">Données satellitaires</a>
+        <a href="index22.html">Requête SQL</a>
+        <a href="Untitled-1.html">Requête spatiale</a>
+        <a href="Geoportail2/cog.html">COG</a>
+        <a href="https://parquetv-1.onrender.com/?url=https://parquetv-1.onrender.com/data4.parquet">GeoParquet</a>
+        <a href="Geoportail2/cog.html">Zarr</a>
+
+
+        <a href="#nous">Qui sommes-nous ?</a>
+    </nav>
+
+    <script>
+        function resetPage() {
+            // Recharge la page après un très court délai pour garantir l'ancre
+            setTimeout(() => {
+                window.location.reload();
+            }, 100); // 100 ms pour s'assurer que l'ancre est atteinte
+        }
+    </script>
+
+    <section class="hero">
+        <div class="slideshow">
+            <div class="slide" style="background-image: url('assets/IMGS/SEISME1.jpeg');"></div>
+            <div class="slide" style="background-image: url('assets/IMGS/SEISME2.jpg');"></div>
+            <div class="slide" style="background-image: url('assets/IMGS/SEISME3.jpg');"></div>
+            <div class="slide" style="background-image: url('assets/IMGS/SEISME4.jpg');"></div>
+
+        </div>
+        <div class="hero-content">
+            <h1>Séisme au Maroc 2023 : Une Tragédie Qui Marque Notre Histoire</h1>
+            <p>
+                Explorez des cartes interactives, des graphiques dynamiques et des requêtes spatiales pour visualiser l'impact du séisme sur les bâtiments et les communautés locales. Grâce à des outils avancés de visualisation de données et l'intégration de données satellites,
+                cette plateforme vous permet d'analyser et de soutenir la reconstruction des zones sinistré<br><strong>Ensemble, reconstruisons l'avenir.</strong><br>
+            </p>
+            <div class="buttons">
+                <a href="Plus_details.html" class="btn-detail">Plus de détails</a>
+                <a href="contact.html" class="btn-contact">Contact</a>
+            </div>
+        </div>
+    </section>
+    <div id="video-container" style="display: none; text-align: center; margin-top: 20px;">
+        <video id="myVideo" width="800" height="450" controls>
+            <source src="videoplayback.mp4" type="video/mp4">
+            Votre navigateur ne prend pas en charge la balise vidéo.
+        </video>
+    </div>
+
+    </div>
+    <div id="container">
+    <h1 class="h1">Bienvenue sur notre carte interactive de la province <strong>d'Al Haouz !</strong> </h1>
+    <h2 class="h1">Cliquez sur une commune pour afficher les bâtiments avant et après la catastrophe !</h2>
+
+
+
+
+
+
+    <div id="control-bar">
+        <button onclick="showBefore(nomCommuneCliquee)">Avant la catastrophe</button>
+        <button onclick="showAfter(nomCommuneCliquee)">Après la catastrophe</button>
+        <button onclick="showComparaison(nomCommuneCliquee)">Afficher la comparaison</button>
+    </div>
+
+   
+
+        <div id="map">
+
+        </div>
+
+
+
+        <!-- Prepare a DOM with a defined width and height for ECharts -->
+         <div id="container">
+        <div id="main" style="width: 600px;height:400px"></div>
+
+        <div id="pieChart" style="width: 600px; height: 400px; margin-top: 20px;"></div>
+        <div id="pieChart2" style="width: 600px; height: 400px; margin-top: 20px;display: none;"></div>
+        
+ 
+    </div>
+
+
+    <!--------JS-------->
+
+    <script src="assets/GEOJSON/l7ouz_updt2.js"></script>
+    <script src="assets/GEOJSON/communes_de_houz.js"></script>
+    <script src="assets/GEOJSON/douawer.js"></script>
+    <script>
+        var map = L.map('map').setView([31.2734, -7.5807], 8.5);
+        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        /*
+
+        // Create marker :
+            var marker = L.marker([31.2755, -7.5855]).addTo(map);
+        */
+
+
+
+
+        /*
+        // Create a cercle :
+
+            var circle = L.circle([31.2734, -7.5807], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.1,
+            radius: 10000
+        }).addTo(map);
+
+        */
+        /*
+        // Create a polygone :
+
+        var earthquakePolygon = L.polygon([
+            [31.245, -7.986],
+            [31.233, -8.442],
+            [30.985, -8.421],
+            [30.902, -7.958],
+            [31.252, -7.740]
+        ], 
+        {
+            color: 'red',      // Couleur du contour
+            fillColor: '#f03', // Couleur de remplissage
+            fillOpacity: 0.5   // Opacité
+        }).addTo(map);
+
+
+
+        earthquakePolygon.bindPopup("Les zones affectes par le tremblement de terre");
+
+        // Create a popp up of circle ,polygone and marker :
+
+
+
+        // Pour créer une popup qui est dynamique et affiche des info sur la position cliqe par lutilisateur : :
+        /*
+            var popup = L.popup();
+
+        function onMapClick(e) {
+
+            popup
+                .setLatLng(e.latlng)
+                .setContent("You clicked the map at " + e.latlng.toString())
+                .openOn(map);
+        }
+
+        map.on('click', onMapClick);
+
+        */
+        // Creating an icon
+
+        // Création d'une icône Material Design (utilisation d'un divIcon avec la classe Material)
+        var materialIcon = L.divIcon({
+            className: 'material-icons', // Classe CSS de l'icône
+            html: 'favorite', // Icône Material que vous voulez utiliser
+            iconSize: [40, 40], // Taille de l'icône
+            iconAnchor: [15, 0] // Ancre de l'icône
+        });
+
+        // Aj.outer un marqueur avec l'icône à la carte
+        //markericone= L.marker([31.2734, -7.5807], {icon: materialIcon}).addTo(map);
+        //markericone.bindPopup("Les zones affectes par le tremblement de terre") // Créer le dropdown directement dans l'HTML
+
+
+        // Create Geojson point
+
+        var geojsonFeature = {
+            "type": "Feature",
+            "properties": {
+                "name": "Coors Field",
+                "amenity": "Baseball Stadium",
+                "popupContent": "This is where the Rockies play!"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-7.5807, 31.2734]
+            }
+        };
+
+        L.geoJSON(geojsonFeature).addTo(map);
+        /*
+        // Create Geojson Lines
+        var myLines = [{
+            "type": "LineString",
+            "coordinates": [[-7.986, 31.245], [-8.442, 31.233], [-8.421, 30.985]]
+        }, {
+            "type": "LineString",
+            "coordinates": [[-7.958, 30.902], [-7.740, 31.252]]
+        }];
+
+        L.geoJSON(myLines).addTo(map);
+
+        [31.245, -7.986],
+            [31.233, -8.442],
+            [30.985, -8.421],
+            [30.902, -7.958],
+            [31.252, -7.740]
+
+           
+
+        */
+
+
+
+        // control that shows state info on hover
+        // control that shows state info on hover
+        const info = L.control();
+
+        info.onAdd = function(map) {
+            this._div = L.DomUtil.create('div', 'info');
+            this.update();
+            return this._div;
+        };
+
+        info.update = function(props) {
+            const contents = props ? `<b>${props.Nom_Commun}</b>` : '';
+            this._div.innerHTML = `<h4>Nom de la commune</h4>${contents}`;
+        };
+
+        info.addTo(map);
+
+
+        // get color depending on population density value
+
+
+        function style(feature) {
+            return {
+                weight: 3,
+                opacity: 0.2,
+                color: 'black',
+                dashArray: '3',
+                fillOpacity: 0.2,
+                fillColor: '#3498db',
+            };
+        }
+
+        function highlightFeature(e) {
+            const layer = e.target;
+
+            layer.setStyle({
+                weight: 5,
+                color: '#666',
+                dashArray: '',
+                fillOpacity: 0.4
+            });
+
+            layer.bringToFront();
+
+            info.update(layer.feature.properties);
+        }
+
+        /* global statesData */
+        const geojson = L.geoJson(comm, {
+            style,
+            onEachFeature
+        }).addTo(map);
+
+        function resetHighlight(e) {
+            geojson.resetStyle(e.target);
+            info.update();
+        }
+
+        function zoomToFeature(e) {
+            map.fitBounds(e.target.getBounds());
+        }
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: onCommuneClick,
+                dblclick: zoomToFeature
+
+            });
+        }
+
+
+
+
+        //   douars=L.geoJSON(douars).addTo(map);
+        //  douars.bindPopup("Les zones affectes par le tremblement de terre")
+
+        // Variables pour stocker le nom de la commune double-cliquée et la couche précédente
+        let nomCommuneCliquee = "";
+
+
+        // Fonction pour gérer les clics sur les communes
+        function onCommuneClick(e) {
+            var geojson = L.geoJson(comm, {
+                style,
+                onEachFeature
+            }).addTo(map);
+
+
+            // Récupère les propriétés de la commune cliquée
+            const properties = e.target.feature.properties;
+
+            // Affecte le nom de la commune à la variable
+            nomCommuneCliquee = properties.Nom_Commun; // Assurez-vous que le nom de la commune est bien dans "nom_commune"
+            console.log("Commune cliquée :", nomCommuneCliquee); // Affiche le nom dans la console
+
+            // Affiche la barre de contrôle
+            showControlBar();
+            setChartOption(nomCommuneCliquee);
+            showBefore(nomCommuneCliquee);
+            showstaistics(nomCommuneCliquee)
+
+
+        }
+
+
+
+        // Couche "Avant la catastrophe" : tous les vecteurs en vert
+        var beforeLayer = L.geoJSON(l7ouz_updt.features.filter(feature => feature.properties.Nom_Commun === nomCommuneCliquee), {
+            style: {
+                color: 'green',
+                weight: 2,
+                fillOpacity: 0.5
+            }
+        });
+
+        // Couche "Après la catastrophe" : style conditionnel selon 'confidence'
+        var afterLayer = L.geoJSON(l7ouz_updt.features.filter(feature => feature.properties.Nom_Commun === nomCommuneCliquee), {
+            style: function(feature) {
+                const confidence = feature.properties.confidence;
+                let color;
+
+                if (confidence >= 0.75) {
+                    color = 'green';
+                } else if (confidence > 0.7 && confidence < 0.75) {
+                    color = 'orange';
+                } else if (confidence >= 0.65 && confidence < 0.7) {
+                    color = 'red';
+                } else {
+                    color = 'gray';
+                }
+
+                return {
+                    color: color,
+                    weight: 2,
+                    fillOpacity: 0.5
+                };
+            }
+        });
+
+
+        // Fonction pour afficher "Avant la catastrophe"
+        function showBefore(nomCommuneCliquee) {
+
+            map.removeLayer(afterLayer);
+            map.removeLayer(beforeLayer);
+
+            beforeLayer = L.geoJSON(l7ouz_updt.features.filter(feature => feature.properties.Nom_Commun === nomCommuneCliquee), {
+                style: {
+                    color: 'green',
+                    weight: 2,
+                    fillOpacity: 0.5
+                }
+            }).addTo(map);
+        }
+        // Ajout d'une légende dynamique
+        if (typeof legend !== "undefined") {
+            map.removeControl(legend); // Supprime la légende existante si elle existe
+        }
+
+        legend = L.control({
+            position: 'bottomright'
+        });
+
+        legend.onAdd = function(map) {
+            const div = L.DomUtil.create('div', 'info legend');
+            const labels = [
+                '<strong>Effet du seivsme</strong>',
+                '<i style="background: green"></i> Sein',
+            ];
+
+            div.innerHTML = labels.join('<br>');
+            return div;
+        };
+
+        legend.addTo(map);
+
+
+        // Fonction pour afficher "Après la catastrophe"
+        function showAfter(nomCommuneCliquee) {
+
+            map.removeLayer(beforeLayer);
+            map.removeLayer(afterLayer);
+
+            afterLayer = L.geoJSON(l7ouz_updt.features.filter(feature => feature.properties.Nom_Commun === nomCommuneCliquee), {
+                style: function(feature) {
+                    const confidence = feature.properties.confidence;
+                    let color;
+
+                    if (confidence >= 0.75) {
+                        color = 'green';
+                    } else if (confidence > 0.7 && confidence < 0.75) {
+                        color = 'orange';
+                    } else if (confidence >= 0.65 && confidence < 0.7) {
+                        color = 'red';
+                    } else {
+                        color = 'gray';
+                    }
+
+                    return {
+                        color: color,
+                        weight: 2,
+                        fillOpacity: 0.5
+                    };
+                }
+            }).addTo(map);
+
+            // Ajout d'une légende dynamique
+            if (typeof legend !== "undefined") {
+                map.removeControl(legend); // Supprime la légende existante si elle existe
+            }
+
+            legend = L.control({
+                position: 'bottomright'
+            });
+
+            legend.onAdd = function(map) {
+                const div = L.DomUtil.create('div', 'info legend');
+                const labels = [
+                    '<strong>Niveaux de confiance</strong>',
+                    '<i style="background: green"></i> Sein',
+                    '<i style="background: orange"></i> Peu detruit',
+                    '<i style="background: red"></i> Totalement detruit',
+                ];
+
+                div.innerHTML = labels.join('<br>');
+                return div;
+            };
+
+            legend.addTo(map);
+        }
+
+
+
+
+
+        function showComparaison(nomCommuneCliquee) {
+            // Redirection vers un fichier HTML avec un paramètre dans l'URL
+            window.location.href = `exemple.html?commune=${encodeURIComponent(nomCommuneCliquee)}`;
+        }
+
+
+
+
+        function showControlBar() {
+            document.getElementById('control-bar').style.display = 'block';
+        }
+
+
+        const chartDom = document.getElementById('pieChart');
+        const chartDom2 = document.getElementById('pieChart2');
+        const myChart = echarts.init(chartDom);
+        const myChart2 = echarts.init(chartDom2);
+
+
+function setChartOption(nomCom) {
+            const selectedData1 = data1[nomCom];
+            console.log(Object.keys(data1));
+            
+            const selectedData2 = data2[nomCom];
+
+            console.log(nomCom)
+
+
+            const option = {
+                title: {
+                    text: `Effet du seisme sur : ${nomCom}`,
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [
+                    {
+                        name: '',
+                        type: 'pie',
+                        radius: '50%',
+                        data: selectedData1,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            const option2 = {
+                title: {
+                    text: `Etat de remboursement de ${nomCom}`,
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [
+                    {
+                        name: '',
+                        type: 'pie',
+                        radius: '50%',
+                        data: selectedData2,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+
+            myChart2.setOption(option2);
+            myChart.setOption(option);
+        }
+
+        // Update the chart when dropdown changes
+        
+
+        // Load data and initialize chart on page load
+
+
+        function showstaistics(nomCommuneCliquee) {
+    // Initialiser l'instance ECharts en fonction de l'élément DOM
+    var myChart = echarts.init(document.getElementById('main'));
+
+    comm.features.forEach(feature => {
+        var nomCommune = feature.properties.Nom_Commun;
+        if (nomCommune == nomCommuneCliquee) {
+            var population = feature.properties.Population;
+            var Marocains = feature.properties.Marocains;
+            var Etrangers = feature.properties.Etrangers;
+            var TypeCommune = feature.properties.Type_Commu;
+
+            console.log(nomCommune, population, Marocains, Etrangers);
+
+            // Configuration et données pour le graphique
+            var option = {
+                title: {
+                    text: nomCommune,
+                    left: 'center',
+                    textStyle: {
+                        fontSize: 12 // Taille du texte réduite
+                    }
+                },
+                grid: {
+                    top: 30,
+                    bottom: 20,
+                    left: 40,
+                    right: 20 // Réduction des marges
+                },
+                tooltip: {},
+                xAxis: {
+                    type: 'category',
+                    data: ['Population'],
+                    axisLabel: {
+                        fontSize: 10 // Taille du texte de l'axe X réduite
+                    }
+                },
+                yAxis: {
+                    axisLabel: {
+                        fontSize: 10 // Taille du texte de l'axe Y réduite
+                    }
+                },
+                series: [{
+                    name: 'Population',
+                    type: 'bar',
+                    data: [population],
+                    barWidth: '50%' // Réduction de la largeur des barres
+                }]
+            };
+
+            // Afficher le graphique
+            myChart.setOption(option);
+        }
+    });
+}
+
+    </script>
+
+</script>
+
+
+<!--------
+<div class="satellite-data">
+<h2 >Données satellitaires du douar EL HNAINE : Comparison avant et aprés le séisme</h2>
+<p>Le séisme qui a frappé la province d'Al Haouz a été d'une gravité exceptionnelle, causant d'importants dégâts matériels et humains dans plusieurs localités, dont Ijoukak. La secousse, qui a eu son épicentre non loin de la région, a secoué toute la zone, laissant derrière elle des décombres et une situation de grande précarité. Les infrastructures de transport, les habitations et les commerces ont été sévèrement endommagés, perturbant le quotidien des habitants.
+
+    À quelques kilomètres d'Ijoukak, dans la localité d'El Hanneine, la situation est également préoccupante. Cette zone, qui présente un relief difficile, a subi des destructions considérables. Les maisons, souvent construites de manière traditionnelle et vulnérables aux secousses, ont été largement endommagées, mettant en péril la sécurité des habitants. Cependant, comme dans les autres zones touchées, une grande solidarité a émergé, soutenue par les efforts des autorités et des services d'urgence, permettant à la population d'El Hanneine de bénéficier d'une aide précieuse pour faire face aux conséquences du séisme. Le processus de reconstruction a débuté, bien que les défis restent considérables, notamment en raison de l'isolement géographique de cette zone montagneuse.</p>
+
+
+<div id="map2">
+    <div id="mini-map" style="width: 150px; height: 150px; position: absolute; bottom: 10px; left: 10px; border: 2px solid #ccc; z-index: 1000;"></div>
+</div>
+</div>
+
+<script>
+    // Initialiser la carte Leaflet
+    var map2 = L.map('map2').setView([31.2734, -7.5807], 13);
+
+    const osmLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/en-us/home">Esri</a>',
+      maxZoom: 19
+    }).addTo(map2);
+    const stamenLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/en-us/home">Esri</a>',
+      maxZoom: 19
+    }).addTo(map2);
+
+    // Définir l'URL du fichier GeoTIFF pour l'image à gauche
+    var urlToGeoTiffLeft = "expl.tif";  // Remplacez par le chemin de votre fichier GeoTIFF gauche
+
+    // Fonction pour charger un GeoTIFF et créer une couche GeoRaster
+    function addGeoTiffLayer(url) {
+      return fetch(url)
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => {
+          return parseGeoraster(arrayBuffer).then(georaster => {
+            var layer = new GeoRasterLayer({
+              georaster: georaster,
+              opacity: 1,
+              resolution: 256
+            });
+            return layer;
+          });
+        });
+    }
+
+    // Créer une couche vide pour la comparaison à droite
+    var emptyLayer = L.layerGroup().addTo(map2); // Un groupe vide
+
+    // Ajouter la couche GeoTIFF pour l'image à gauche
+    addGeoTiffLayer(urlToGeoTiffLeft).then(leftGeoTiffLayer => {
+      // Ajouter la couche GeoTIFF à la carte
+      leftGeoTiffLayer.addTo(map2);
+
+      // Ajuster la vue de la carte pour inclure l'image à gauche
+      map2.fitBounds(leftGeoTiffLayer.getBounds());
+
+      // Ajouter le contrôle de comparaison
+      var compare = L.control.compare([leftGeoTiffLayer, osmLayer], [emptyLayer, stamenLayer]).addTo(map2);
+    });
+
+
+
+
+// Initialisation de la mini-map
+var miniMap = L.map('mini-map', {
+    center: map.getCenter(), // Synchronisation initiale du centre
+    zoom: map.getZoom() - 5, // Zoom plus faible pour une vue d'ensemble
+    zoomControl: false,     // Pas de contrôle de zoom sur la mini-map
+    attributionControl: false // Pas d'attribution sur la mini-map
+});
+
+// Ajout de la couche de base à la mini-map
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(miniMap);
+
+
+
+
+// Ajout d'un rectangle rouge pour représenter la vue principale
+var bounds = map.getBounds(); // Limites actuelles de la carte principale
+    var rectangle = L.rectangle(bounds, {
+        color: 'red',
+        weight: 2,
+        fillOpacity: 0
+    }).addTo(miniMap);
+
+    // Mettre à jour le rectangle lors du mouvement de la carte principale
+    map.on('move', function () {
+        var bounds = map.getBounds(); // Obtenir les nouvelles limites
+        rectangle.setBounds(bounds); // Mettre à jour les limites du rectangle
+        miniMap.setView(map.getCenter(), map.getZoom() - 1, { animate: false });
+    });
+
+
+</script>
+
+-------->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="nous">
+    <div class="team-section">
+        <h2>Équipe de Travail</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <p><strong>Nom :</strong> Mohamed Salem Bouhia</p>
+                <p><strong>Email :</strong> mohamed.salim.bo@gmail.com</p>
+            </div>
+            <div class="team-member">
+                <p><strong>Nom :</strong> Ech-chetyouy Houssaine</p>
+                <p><strong>Email :</strong> eechchetyouy@gmail.com</p>
+            </div>
+            <div class="team-member">
+                <p><strong>Nom :</strong> Maroua Chettat</p>
+                <p><strong>Email :</strong> chattatmaroua@gmail.com</p>
+            </div>
+            <div class="team-member">
+                <p><strong>Nom :</strong> Slimani Mohamed Amine</p>
+                <p><strong>Email :</strong> slimamine09@gmail.com</p>
+            </div>
+            <div class="team-member">
+                <p><strong>Nom :</strong> Zouhir Taamart</p>
+                <p><strong>Email :</strong> zouhayrtaamart2002@gmail.com</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        const teamMembers = document.querySelectorAll(".team-member");
+        let index = 0;
+
+        function showNextMember() {
+            if (index < teamMembers.length) {
+                teamMembers[index].classList.add("show");
+                index++;
+                setTimeout(showNextMember, 1000); // Afficher le suivant après 1 seconde
+            }
+        }
+
+        // Lancer l'animation au chargement de la page
+        window.onload = showNextMember;
+    </script>
+
+    <footer>
+        <p>&copy; 2024 SEISMAROC - Tous droits réservés.</p>
+    </footer>
+</body>
+
+</html>
